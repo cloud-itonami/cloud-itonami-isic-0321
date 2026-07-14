@@ -1,0 +1,11 @@
+{:itonami.blueprint/id "cloud-itonami-isic-0321"
+ :itonami.blueprint/name "Marine Aquaculture Operations Coordination Actor"
+ :itonami.blueprint/isic-rev5 "0321"
+ :itonami.blueprint/domain :agriculture/aquaculture-operations
+ :itonami.blueprint/license "AGPL-3.0-or-later"
+ :itonami.blueprint/social-impact [:aquaculture-facility-coordination :transparent-supply-chain :sustainability-monitoring]
+ :itonami.blueprint/governor :aquaculture-operations-governor
+ :itonami.blueprint/robotics false
+ :itonami.blueprint/required-technologies [:identity :audit-ledger :dmn :forms]
+ :itonami.blueprint/optional-technologies [:telemetry :sustainability-metrics]
+ :itonami.blueprint/status :public-oss}
