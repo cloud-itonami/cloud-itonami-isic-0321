@@ -15,11 +15,11 @@
   high confidence."
   (reify Advisor
     (-advise [_advisor _store request]
-      (let [{:keys [op site-id]} request]
+      (let [{:keys [op site-id value]} request]
         {:effect :propose
          :op op
          :site-id site-id
-         :value {:op op}
+         :value (or value {:op op})
          :cites ["mock-basis"]
          :summary (str "Mock proposal for " op " at " site-id)
          :confidence 0.9}))))

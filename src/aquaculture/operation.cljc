@@ -85,20 +85,37 @@
                :record (commit-record request context proposal)
                :audit [(commit-fact request context proposal)]}))))
 
-      ;; Commit: apply to store or hold.
+      ;; Commit: dispatch to the op-specific store method. Hold/escalate
+      ;; never reach here (only :decide's :commit branch routes to
+      ;; :finalize; see the conditional edge below) -- the store is
+      ;; never touched unless the governor is clean.
       (g/add-node :finalize
-        (fn [{:keys [disposition record]}]
-          (if (= disposition :commit)
-            {:disposition disposition}
-            {:disposition disposition})))
+        (fn [{:keys [request record]}]
+          (let [{:keys [op site-id]} request
+                value (:value record)]
+            (case op
+              :log-stock-record              (store/log-stock! store site-id value)
+              :schedule-facility-maintenance (store/schedule-maintenance! store site-id value)
+              :flag-stock-health-concern     (store/flag-health-concern! store site-id value)
+              :order-supplies                (store/order-supply! store site-id value))
+            {:disposition :commit})))
 
-      ;; Edges: linear flow with early exit on hold.
+      ;; Terminal node for hold/escalate -- no store mutation.
+      (g/add-node :terminal (fn [s] s))
+
+      (g/set-entry-point :intake)
+
+      ;; Edges: linear flow through :decide, then branch.
       (g/add-edge :intake :advise)
       (g/add-edge :advise :govern)
       (g/add-edge :govern :decide)
-      (g/add-edge :decide :finalize)
+      (g/add-conditional-edges :decide
+        (fn [{:keys [disposition]}]
+          (if (= disposition :commit) :finalize :terminal))
+        {:finalize :finalize :terminal :terminal})
 
       ;; Terminal states.
       (g/set-finish-point :finalize)
+      (g/set-finish-point :terminal)
 
-      (g/compile {:checkpointer checkpointer})))
+      (g/compile-graph {:checkpointer checkpointer})))
