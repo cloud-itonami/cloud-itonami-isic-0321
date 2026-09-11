@@ -48,13 +48,13 @@ All modules are portable `.cljc` (ClojureScript-first, compatible with JVM/nbb).
 
 ```bash
 # Install (workspace already has langgraph-clj at ../../../kotoba-lang/langgraph)
-clj -M:test
+kbb -M:test
 
 # Run demo
-clj -M:dev:run
+kbb -M:dev:run
 
 # Lint
-clj -M:lint
+kbb -M:lint
 ```
 
 ## Files
