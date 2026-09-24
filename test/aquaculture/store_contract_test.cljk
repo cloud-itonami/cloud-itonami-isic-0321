@@ -1,6 +1,6 @@
 (ns aquaculture.store-contract-test
   "Contract tests for the aquaculture Store."
-  (:require [clojure.test :refer [deftest is]]
+  (:require [kotoba.test :refer [deftest is]]
             [aquaculture.store :as store]))
 
 (deftest facility-lookup
