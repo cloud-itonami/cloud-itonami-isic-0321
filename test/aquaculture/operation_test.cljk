@@ -1,5 +1,5 @@
 (ns aquaculture.operation-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [langgraph.graph :as g]
             [aquaculture.store :as store]
             [aquaculture.operation :as operation]))
